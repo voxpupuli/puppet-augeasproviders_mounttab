@@ -1,8 +1,0 @@
-name    'herculesteam-augeasproviders_mounttab'
-version '1.0.0'
-source 'git://github.com/hercules-team/augeasproviders_mounttab'
-author 'Dominic Cleal, Raphael Pinson'
-license 'Apache 2.0'
-summary 'Augeas-based mounttab provider for Puppet'
-description 'This module provides a provider for the mounttab type using the Augeas configuration API library.'
-project_page 'http://augeasproviders.com'
