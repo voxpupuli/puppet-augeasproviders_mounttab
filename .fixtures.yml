@@ -1,0 +1,10 @@
+fixtures:
+  repositories:
+    "augeasproviders_core":
+      repo: "git://github.com/hercules-team/augeasproviders.git"
+      ref: "e52a4cc2c42c8c9e83a3160f147c871776addf81"
+    mount_providers:
+      repo: git://github.com/puppetlabs/puppetlabs-mount_providers.git
+      ref: 0.0.2
+  symlinks:
+    augeasproviders_mounttab: "#{source_dir}"
