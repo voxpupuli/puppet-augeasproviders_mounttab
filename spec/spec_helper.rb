@@ -38,8 +38,8 @@ if Gem::Requirement.new("~> 2.7.20") =~ ver || Gem::Requirement.new("~> 3.0.0") 
   puts "augeasproviders: setting Puppet[:libdir] to work around broken type autoloading"
   # libdir is only a single dir, so it can only workaround loading of one external module
   Puppet[:libdir] = "#{Puppet[:modulepath]}/augeasproviders_core/lib"
-  # Ugly hack, because there can only be one libdir
-  `rsync -a #{Puppet[:modulepath]}/mount_providers/lib/ #{Puppet[:modulepath]}/augeasproviders_core/lib`
+# Ugly hack, because there can only be one libdir
+`rsync -a #{Puppet[:modulepath]}/mount_providers/lib/ #{Puppet[:modulepath]}/augeasproviders_core/lib`
 end
 
 # Load all shared contexts and shared examples
