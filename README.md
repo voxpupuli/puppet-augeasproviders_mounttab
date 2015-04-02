@@ -1,6 +1,9 @@
-[![Puppet Forge](http://img.shields.io/puppetforge/v/herculesteam/augeasproviders_mounttab.svg)](https://forge.puppetlabs.com/herculesteam/augeasproviders_mounttab)
-[![Build Status](https://travis-ci.org/hercules-team/augeasproviders_mounttab.svg?branch=master)](https://travis-ci.org/hercules-team/augeasproviders_mounttab)
+[![Puppet Forge Version](http://img.shields.io/puppetforge/v/herculesteam/augeasproviders_mounttab.svg)](https://forge.puppetlabs.com/herculesteam/augeasproviders_mounttab)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/herculesteam/augeasproviders_mounttab.svg)](https://forge.puppetlabs.com/herculesteam/augeasproviders_mounttab)
+[![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/herculesteam/augeasproviders_mounttab.svg)](https://forge.puppetlabs.com/herculesteam/augeasproviders_mounttab)
+[![Build Status](https://img.shields.io/travis/hercules-team/augeasproviders_mounttab/master.svg)](https://travis-ci.org/hercules-team/augeasproviders_mounttab)
 [![Coverage Status](https://img.shields.io/coveralls/hercules-team/augeasproviders_mounttab.svg)](https://coveralls.io/r/hercules-team/augeasproviders_mounttab)
+[![Gemnasium](https://img.shields.io/gemnasium/hercules-team/augeasproviders_mounttab.svg)](https://gemnasium.com/hercules-team/augeasproviders_mounttab)
 
 
 # mounttab: additional provider for the mounttab type for Puppet
