@@ -13,6 +13,7 @@
 require File.dirname(__FILE__) + '/../../../augeasproviders/mounttab/fstab'
 require File.dirname(__FILE__) + '/../../../augeasproviders/mounttab/vfstab'
 
+raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
 Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
   desc "Uses Augeas API to update the /etc/(v)fstab file"
 
