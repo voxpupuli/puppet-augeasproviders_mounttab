@@ -10,6 +10,8 @@ end
 
 describe provider_class, :if => valid_lens? do
   before :each do
+    Facter.stubs(:value).with(:hostname).returns('localhost')
+    Facter.stubs(:value).with(:domain).returns('localdomain')
     Facter.stubs(:value).with(:feature).returns(nil)
     Facter.stubs(:value).with(:osfamily).returns("Solaris")
     Facter.stubs(:value).with(:operatingsystem).returns("Solaris")
