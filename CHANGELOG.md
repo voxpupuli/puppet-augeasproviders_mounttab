@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- Added a hard requirement to the metadata.json for puppetlabs/mount_providers
+
 ## 2.0.2
 
 - Upped supported Puppet versions to include Puppet 5
