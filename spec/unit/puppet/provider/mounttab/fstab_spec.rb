@@ -46,8 +46,6 @@ describe provider_class do
     let(:target) { tmptarget.path }
 
     it "should create simple new entry" do
-      pending "log deprecation warning needs to be addressed but test works"
-
       apply!(Puppet::Type.type(:mounttab).new(
         :name     => "/mnt",
         :device   => "/dev/myvg/mytest",
