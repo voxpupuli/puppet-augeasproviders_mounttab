@@ -3,6 +3,7 @@
 [![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/herculesteam/augeasproviders_mounttab.svg)](https://forge.puppetlabs.com/herculesteam/augeasproviders_mounttab)
 [![Build Status](https://img.shields.io/travis/hercules-team/augeasproviders_mounttab/master.svg)](https://travis-ci.org/hercules-team/augeasproviders_mounttab)
 [![Coverage Status](https://img.shields.io/coveralls/hercules-team/augeasproviders_mounttab.svg)](https://coveralls.io/r/hercules-team/augeasproviders_mounttab)
+[![Sponsor](https://img.shields.io/badge/%E2%99%A5-Sponsor-hotpink.svg)](https://github.com/sponsors/raphink)
 
 
 # mounttab: additional provider for the mounttab type for Puppet
