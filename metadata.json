@@ -1,12 +1,12 @@
 {
-  "name": "herculesteam-augeasproviders_mounttab",
+  "name": "puppet-augeasproviders_mounttab",
   "version": "2.1.1",
-  "author": "Raphael Pinson",
+  "author": "Vox Pupuli",
   "summary": "Augeas-based mounttab provider for Puppet",
   "license": "Apache-2.0",
-  "source": "https://github.com/hercules-team/augeasproviders_mounttab",
-  "project_page": "https://github.com/hercules-team/augeasproviders_mounttab",
-  "issues_url": "https://github.com/hercules-team/augeasproviders_mounttab/issues",
+  "source": "https://github.com/voxpupuli/puppet-augeasproviders_mounttab",
+  "project_page": "https://github.com/voxpupuli/puppet-augeasproviders_mounttab",
+  "issues_url": "https://github.com/voxpupuli/puppet-augeasproviders_mounttab/issues",
   "description": "This module provides a provider for the mounttab type using the Augeas configuration API library.",
   "dependencies": [
     {
