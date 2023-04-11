@@ -10,14 +10,14 @@ end
 
 describe provider_class, :if => valid_lens? do
   before :each do
-    Facter.stubs(:value).with(:hostname).returns('localhost')
-    Facter.stubs(:value).with(:domain).returns('localdomain')
-    Facter.stubs(:value).with(:feature).returns(nil)
-    Facter.stubs(:value).with(:osfamily).returns("Solaris")
-    Facter.stubs(:value).with(:operatingsystem).returns("Solaris")
-    FileTest.stubs(:exist?).returns false
-    FileTest.stubs(:exist?).with('/etc/fstab').returns true
-    FileTest.stubs(:exist?).with('/etc/vfstab').returns true
+    allow(Facter).to receive(:value).with(:hostname).and_return('localhost')
+    allow(Facter).to receive(:value).with(:domain).and_return('localdomain')
+    allow(Facter).to receive(:value).with(:feature).and_return(nil)
+    allow(Facter).to receive(:value).with(:osfamily).and_return("Solaris")
+    allow(Facter).to receive(:value).with(:operatingsystem).and_return("Solaris")
+    allow(FileTest).to receive(:exist?).and_return false
+    allow(FileTest).to receive(:exist?).with('/etc/fstab').and_return true
+    allow(FileTest).to receive(:exist?).with('/etc/vfstab').and_return true
   end
 
   context "with empty vfstab file" do
@@ -109,7 +109,7 @@ describe provider_class, :if => valid_lens? do
     let(:target) { tmptarget.path }
 
     it "should list instances" do
-      provider_class.stubs(:target).returns(target)
+      allow(provider_class).to receive(:target).and_return(target)
       inst = provider_class.instances.map { |p|
         r = {}
         [:name,:ensure,:device,:blockdevice,:fstype,:options,:pass,:atboot,:dump].each { |pr| r[pr] = p.get(pr) }

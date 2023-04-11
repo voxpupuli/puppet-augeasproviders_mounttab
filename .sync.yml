@@ -1,6 +1,14 @@
 ---
+.github/workflows/ci.yml:
+  additional_packages: libaugeas-dev augeas-tools
+  rubocop: false
+Gemfile:
+  optional:
+    ':test':
+      - gem: ruby-augeas
 spec/spec_helper.rb:
-  ap_load_workaround_extra: |
-    $LOAD_PATH.unshift(File.join(dir, 'fixtures/modules/mount_providers/lib'))
-.travis.yml:
-  forge_password: "Z6i/6CKBrdO1OFXiEKv9CaBzqXwJFuKS5nGF80BGuRPRTynqYORYuOlICvhhaPLDG7EkdIvI9fMTLeJ6YtxdLaukH7r6ryzGgD8mltSrV1fcXeoZTFKDjpl7My0qphHrIex4xBlfnrErkEoO7+IT2FV4JKnGZMZT/xb5Ply+mvE="
+  spec_overrides:
+    - "require 'augeas_spec'"
+    - "# augeasproviders: setting $LOAD_PATH to work around broken type autoloading"
+    - "$LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/augeasproviders_core/lib'))"
+    - "$LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/mount_providers/lib'))"
