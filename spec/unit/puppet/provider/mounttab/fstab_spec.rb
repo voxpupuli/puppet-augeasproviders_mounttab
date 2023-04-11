@@ -32,13 +32,13 @@ end
 
 describe provider_class do
   before :each do
-    Facter.stubs(:value).with(:hostname).returns('localhost')
-    Facter.stubs(:value).with(:domain).returns('localdomain')
-    Facter.stubs(:value).with(:feature).returns(nil)
-    Facter.stubs(:value).with(:osfamily).returns("RedHat")
-    Facter.stubs(:value).with(:operatingsystem).returns("Fedora")
-    FileTest.stubs(:exist?).returns false
-    FileTest.stubs(:exist?).with('/etc/fstab').returns true
+    allow(Facter).to receive(:value).with(:hostname).and_return('localhost')
+    allow(Facter).to receive(:value).with(:domain).and_return('localdomain')
+    allow(Facter).to receive(:value).with(:feature).and_return(nil)
+    allow(Facter).to receive(:value).with(:osfamily).and_return("RedHat")
+    allow(Facter).to receive(:value).with(:operatingsystem).and_return("Fedora")
+    allow(FileTest).to receive(:exist?).and_return false
+    allow(FileTest).to receive(:exist?).with('/etc/fstab').and_return true
   end
 
   context "with empty file" do
@@ -136,7 +136,7 @@ describe provider_class do
     let(:target) { tmptarget.path }
 
     it "should list instances" do
-      provider_class.stubs(:target).returns(target)
+      allow(provider_class).to receive(:target).and_return(target)
       inst = provider_class.instances.map { |p|
         r = {}
         [:name,:ensure,:device,:blockdevice,:fstype,:options,:pass,:atboot,:dump].each { |pr| r[pr] = p.get(pr) }
