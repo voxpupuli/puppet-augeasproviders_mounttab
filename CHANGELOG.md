@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/tree/v4.0.0) (2023-06-22)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/compare/v3.0.0...v4.0.0)
+
+**Breaking changes:**
+
+- Drop EoL Debian 9 support [\#21](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/21) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 6 support [\#17](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/17) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- puppet/augeasproviders\_core: Allow 4.x [\#20](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/20) ([bastelfreak](https://github.com/bastelfreak))
+- Add puppet 8 support [\#19](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/19) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/tree/v3.0.0) (2023-04-11)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/compare/2.1.1...v3.0.0)
