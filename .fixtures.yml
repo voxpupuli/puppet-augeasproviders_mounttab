@@ -1,6 +1,4 @@
 fixtures:
   repositories:
-    augeasproviders_core:
-      repo: https://github.com/voxpupuli/puppet-augeasproviders_core
-    mount_providers:
-      repo: https://github.com/puppetlabs-toy-chest/puppetlabs-mount_providers.git
+    augeasproviders_core: https://github.com/voxpupuli/puppet-augeasproviders_core
+    mount_providers: https://github.com/puppetlabs-toy-chest/puppetlabs-mount_providers.git
