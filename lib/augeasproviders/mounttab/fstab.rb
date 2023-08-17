@@ -11,7 +11,6 @@ require File.dirname(__FILE__) + '/../../augeasproviders/mounttab'
 
 module AugeasProviders::Mounttab
   class Fstab
-
     attr_reader :resource
 
     def self.default_file
@@ -24,10 +23,11 @@ module AugeasProviders::Mounttab
 
     def self.get_resource(aug, mpath, target)
       entry = {
-        :ensure => :present,
-        :target => target
+        ensure: :present,
+        target: target
       }
       return nil unless entry[:name] = aug.get("#{mpath}/file")
+
       entry[:device] = aug.get("#{mpath}/spec")
       entry[:fstype] = aug.get("#{mpath}/vfstype")
 
@@ -46,12 +46,12 @@ module AugeasProviders::Mounttab
     end
 
     def self.create(aug, resource)
-      aug.set("$resource/spec", resource[:device])
-      aug.set("$resource/file", resource[:name])
-      aug.set("$resource/vfstype", resource[:fstype])
-      insoptions(aug, "$resource", resource)
-      aug.set("$resource/dump", resource[:dump].to_s)
-      aug.set("$resource/passno", resource[:pass].to_s)
+      aug.set('$resource/spec', resource[:device])
+      aug.set('$resource/file', resource[:name])
+      aug.set('$resource/vfstype', resource[:fstype])
+      insoptions(aug, '$resource', resource)
+      aug.set('$resource/dump', resource[:dump].to_s)
+      aug.set('$resource/passno', resource[:pass].to_s)
     end
 
     def self.insoptions(aug, entry, resource)
@@ -60,20 +60,20 @@ module AugeasProviders::Mounttab
       values = resource.original_parameters[:options]
 
       aug.rm("#{entry}/opt")
-      insafter = "vfstype"
-      if values and not values.empty?
+      insafter = 'vfstype'
+      if values and !values.empty?
         [values].flatten.each do |opt|
-          optk, optv = opt.split("=", 2)
-          aug.insert("#{entry}/#{insafter}", "opt", false)
+          optk, optv = opt.split('=', 2)
+          aug.insert("#{entry}/#{insafter}", 'opt', false)
           aug.set("#{entry}/opt[last()]", optk)
           aug.set("#{entry}/opt[last()]/value", optv) if optv
-          insafter = "opt[last()]"
+          insafter = 'opt[last()]'
         end
       else
         # Strictly this is optional, but only Augeas > 0.10.0 has a lens that
         # knows this is the case, so always fill it in.
-        aug.insert("#{entry}/#{insafter}", "opt", false)
-        aug.set("#{entry}/opt", "defaults")
+        aug.insert("#{entry}/#{insafter}", 'opt', false)
+        aug.set("#{entry}/opt", 'defaults')
       end
     end
 
@@ -84,9 +84,7 @@ module AugeasProviders::Mounttab
     def self.set_dump(aug, resource, value)
       # Ensure "defaults" option is always set if dump is being set, as the
       # opts field is optional
-      if aug.match("$target/*[file = '#{resource[:name]}']/opt").empty?
-        aug.set("$target/*[file = '#{resource[:name]}']/opt", "defaults")
-      end
+      aug.set("$target/*[file = '#{resource[:name]}']/opt", 'defaults') if aug.match("$target/*[file = '#{resource[:name]}']/opt").empty?
 
       aug.set("$target/*[file = '#{resource[:name]}']/dump", value.to_s)
     end
@@ -98,24 +96,20 @@ module AugeasProviders::Mounttab
     def self.set_pass(aug, resource, value)
       # Ensure "defaults" option is always set if passno is being set, as the
       # opts field is optional
-      if aug.match("$target/*[file = '#{resource[:name]}']/opt").empty?
-        aug.set("$target/*[file = '#{resource[:name]}']/opt", "defaults")
-      end
+      aug.set("$target/*[file = '#{resource[:name]}']/opt", 'defaults') if aug.match("$target/*[file = '#{resource[:name]}']/opt").empty?
 
       # Ensure dump is always set too
-      if aug.match("$target/*[file = '#{resource[:name]}']/dump").empty?
-        aug.set("$target/*[file = '#{resource[:name]}']/dump", "0")
-      end
+      aug.set("$target/*[file = '#{resource[:name]}']/dump", '0') if aug.match("$target/*[file = '#{resource[:name]}']/dump").empty?
 
       aug.set("$target/*[file = '#{resource[:name]}']/passno", value.to_s)
     end
 
-    def self.atboot(aug, resource)
+    def self.atboot(_aug, resource)
       resource.should(:atboot)
     end
 
-    def self.set_atboot(aug, resource, value)
-      return
+    def self.set_atboot(_aug, _resource, _value)
+      nil
     end
 
     def self.empty_options

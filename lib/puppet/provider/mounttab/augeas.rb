@@ -13,14 +13,15 @@
 require File.dirname(__FILE__) + '/../../../augeasproviders/mounttab/fstab'
 require File.dirname(__FILE__) + '/../../../augeasproviders/mounttab/vfstab'
 
-raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
-Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
-  desc "Uses Augeas API to update the /etc/(v)fstab file"
+raise('Missing augeasproviders_core dependency') if Puppet::Type.type(:augeasprovider).nil?
+
+Puppet::Type.type(:mounttab).provide(:augeas, parent: Puppet::Type.type(:augeasprovider).provider(:default)) do
+  desc 'Uses Augeas API to update the /etc/(v)fstab file'
 
   def self.osimpl
     os = Facter.value(:osfamily) or Facter.value(:operatingsystem)
     case os
-    when "Solaris"
+    when 'Solaris'
       AugeasProviders::Mounttab::Vfstab
     else
       AugeasProviders::Mounttab::Fstab
@@ -39,13 +40,13 @@ Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:auge
     "$target/*[file = '#{resource[:name]}']"
   end
 
-  confine :feature => :augeas
-  defaultfor :feature => :augeas
+  confine feature: :augeas
+  defaultfor feature: :augeas
 
   def self.instances
     augopen do |aug|
       resources = []
-      aug.match("$target/*").each do |mpath|
+      aug.match('$target/*').each do |mpath|
         entry = osimpl.get_resource(aug, mpath, target)
         resources << new(entry) unless entry.nil?
       end
@@ -53,7 +54,7 @@ Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:auge
     end
   end
 
-  def create 
+  def create
     augopen! do |aug|
       aug.defnode('resource', "$target/#{next_seq(aug.match('$target/*'))}", nil)
       self.class.osimpl.create(aug, resource)
@@ -74,18 +75,16 @@ Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:auge
 
   def blockdevice
     augopen do |aug|
-      aug.get('$resource/fsck') or "-"
+      aug.get('$resource/fsck') or '-'
     end
   end
 
   def blockdevice=(value)
     augopen! do |aug|
-      if value == "-"
+      if value == '-'
         aug.rm('$resource/fsck')
       else
-        if aug.match('$resource/fsck').empty?
-          aug.insert('$resource/spec', 'fsck', false)
-        end
+        aug.insert('$resource/spec', 'fsck', false) if aug.match('$resource/fsck').empty?
         aug.set('$resource/fsck', value.to_s)
       end
     end
@@ -112,7 +111,7 @@ Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:auge
         opt = "#{opt}=#{optv}" if optv
         opts << opt
       end
-      opts = opts.join(",")
+      opts = opts.join(',')
 
       # [] and ["defaults"] are synonyms, so return what the user requested if
       # the current value is one of these to avoid changes
@@ -129,7 +128,7 @@ Puppet::Type.type(:mounttab).provide(:augeas, :parent => Puppet::Type.type(:auge
     self.class.osimpl.insoptions(aug, entry, resource)
   end
 
-  def options=(values)
+  def options=(_values)
     augopen! do |aug|
       insoptions(aug, '$resource', resource)
     end
