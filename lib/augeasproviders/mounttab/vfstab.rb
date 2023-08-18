@@ -11,7 +11,6 @@ require File.dirname(__FILE__) + '/../../augeasproviders/mounttab'
 
 module AugeasProviders::Mounttab
   class Vfstab
-
     attr_reader :resource
 
     def self.default_file
@@ -24,14 +23,15 @@ module AugeasProviders::Mounttab
 
     def self.get_resource(aug, mpath, target)
       entry = {
-        :ensure => :present,
-        :target => target
+        ensure: :present,
+        target: target
       }
       return nil unless entry[:name] = aug.get("#{mpath}/file")
+
       entry[:device] = aug.get("#{mpath}/spec")
       entry[:fstype] = aug.get("#{mpath}/vfstype")
-      entry[:blockdevice] = (aug.get("#{mpath}/fsck") or "-")
-      entry[:pass] = (aug.get("#{mpath}/passno") or "-")
+      entry[:blockdevice] = (aug.get("#{mpath}/fsck") or '-')
+      entry[:pass] = (aug.get("#{mpath}/passno") or '-')
       entry[:atboot] = aug.get("#{mpath}/atboot")
 
       options = []
@@ -42,24 +42,22 @@ module AugeasProviders::Mounttab
         options << opt
       end
       entry[:options] = if options.empty?
-        "-"
-      else
-        options
-      end
+                          '-'
+                        else
+                          options
+                        end
 
       entry
     end
 
     def self.create(aug, resource)
-      aug.set("$resource/spec", resource[:device])
-      if resource[:blockdevice] and resource[:blockdevice] != ""
-        aug.set("$resource/fsck", resource[:blockdevice])
-      end
-      aug.set("$resource/file", resource[:name])
-      aug.set("$resource/vfstype", resource[:fstype])
-      aug.set("$resource/passno", resource[:pass].to_s) unless resource[:pass] == "-"
-      aug.set("$resource/atboot", resource[:atboot].to_s)
-      insoptions(aug, "$resource", resource)
+      aug.set('$resource/spec', resource[:device])
+      aug.set('$resource/fsck', resource[:blockdevice]) if resource[:blockdevice] and resource[:blockdevice] != ''
+      aug.set('$resource/file', resource[:name])
+      aug.set('$resource/vfstype', resource[:fstype])
+      aug.set('$resource/passno', resource[:pass].to_s) unless resource[:pass] == '-'
+      aug.set('$resource/atboot', resource[:atboot].to_s)
+      insoptions(aug, '$resource', resource)
     end
 
     def target
@@ -72,34 +70,32 @@ module AugeasProviders::Mounttab
       values = resource.original_parameters[:options]
 
       aug.rm("#{entry}/opt")
-      if values and not values.empty?
-        [values].flatten.each do |opt|
-          optk, optv = opt.split("=", 2)
-          aug.set("#{entry}/opt[last()+1]", optk)
-          aug.set("#{entry}/opt[last()]/value", optv) if optv
-        end
+      return unless values and !values.empty?
+
+      [values].flatten.each do |opt|
+        optk, optv = opt.split('=', 2)
+        aug.set("#{entry}/opt[last()+1]", optk)
+        aug.set("#{entry}/opt[last()]/value", optv) if optv
       end
     end
 
-    def self.dump(aug, resource)
+    def self.dump(_aug, resource)
       resource.should(:dump)
     end
 
-    def self.set_dump(aug, resource, value)
-      return
+    def self.set_dump(_aug, _resource, _value)
+      nil
     end
 
     def self.pass(aug, resource)
-      aug.get("$target/*[file = '#{resource[:name]}']/passno") or "-"
+      aug.get("$target/*[file = '#{resource[:name]}']/passno") or '-'
     end
 
     def self.set_pass(aug, resource, value)
-      if value == "-"
+      if value == '-'
         aug.rm("$target/*[file = '#{resource[:name]}']/passno")
       else
-        if aug.match("$target/*[file = '#{resource[:name]}']/passno").empty?
-          aug.insert("$target/*[file = '#{resource[:name]}']/vfstype", "passno", false)
-        end
+        aug.insert("$target/*[file = '#{resource[:name]}']/vfstype", 'passno', false) if aug.match("$target/*[file = '#{resource[:name]}']/passno").empty?
         aug.set("$target/*[file = '#{resource[:name]}']/passno", value.to_s)
       end
     end

@@ -8,33 +8,33 @@ def valid_lens?
   Puppet::Util::Package.versioncmp(Puppet::Type.type(:mounttab).provider(:augeas).aug_version, '0.10.0') > 0
 end
 
-describe provider_class, :if => valid_lens? do
-  before :each do
+describe provider_class, if: valid_lens? do
+  before do
     allow(Facter).to receive(:value).with(:hostname).and_return('localhost')
     allow(Facter).to receive(:value).with(:domain).and_return('localdomain')
     allow(Facter).to receive(:value).with(:feature).and_return(nil)
-    allow(Facter).to receive(:value).with(:osfamily).and_return("Solaris")
-    allow(Facter).to receive(:value).with(:operatingsystem).and_return("Solaris")
+    allow(Facter).to receive(:value).with(:osfamily).and_return('Solaris')
+    allow(Facter).to receive(:value).with(:operatingsystem).and_return('Solaris')
     allow(FileTest).to receive(:exist?).and_return false
     allow(FileTest).to receive(:exist?).with('/etc/fstab').and_return true
     allow(FileTest).to receive(:exist?).with('/etc/vfstab').and_return true
   end
 
-  context "with empty vfstab file" do
-    let(:tmptarget) { aug_fixture("empty") }
+  context 'with empty vfstab file' do
+    let(:tmptarget) { aug_fixture('empty') }
     let(:target) { tmptarget.path }
 
-    it "should create simple new entry" do
+    it 'creates simple new entry' do
       apply!(Puppet::Type.type(:mounttab).new(
-        :name     => "/foo",
-        :device   => "/dev/dsk/c1t1d1s1",
-        :fstype   => "ufs",
-        :atboot   => "yes",
-        :target   => target,
-        :provider => "augeas"
-      ))
+               name: '/foo',
+               device: '/dev/dsk/c1t1d1s1',
+               fstype: 'ufs',
+               atboot: 'yes',
+               target: target,
+               provider: 'augeas'
+             ))
 
-      augparse(target, "Vfstab.lns", '
+      augparse(target, 'Vfstab.lns', '
         { "1"
           { "spec" = "/dev/dsk/c1t1d1s1" }
           { "fsck" = "/dev/rdsk/c1t1d1s1" }
@@ -45,20 +45,20 @@ describe provider_class, :if => valid_lens? do
       ')
     end
 
-    it "should create new entry" do
+    it 'creates new entry' do
       apply!(Puppet::Type.type(:mounttab).new(
-        :name     => "/foo",
-        :device   => "/dev/dsk/c1t1d1s1",
-        :blockdevice => "/dev/foo/c1t1d1s1",
-        :fstype   => "ufs",
-        :pass     => "2",
-        :atboot   => "yes",
-        :options  => [ "nosuid", "nodev" ],
-        :target   => target,
-        :provider => "augeas"
-      ))
+               name: '/foo',
+               device: '/dev/dsk/c1t1d1s1',
+               blockdevice: '/dev/foo/c1t1d1s1',
+               fstype: 'ufs',
+               pass: '2',
+               atboot: 'yes',
+               options: %w[nosuid nodev],
+               target: target,
+               provider: 'augeas'
+             ))
 
-      augparse(target, "Vfstab.lns", '
+      augparse(target, 'Vfstab.lns', '
         { "1"
           { "spec" = "/dev/dsk/c1t1d1s1" }
           { "fsck" = "/dev/foo/c1t1d1s1" }
@@ -72,87 +72,87 @@ describe provider_class, :if => valid_lens? do
       ')
     end
 
-    it "should create two new entries" do
+    it 'creates two new entries' do
       apply!(
         Puppet::Type.type(:mounttab).new(
-          :name     => "/foo",
-          :device   => "/dev/dsk/c1t1d1s1",
-          :blockdevice => "/dev/foo/c1t1d1s1",
-          :fstype   => "ufs",
-          :pass     => "2",
-          :atboot   => "yes",
-          :options  => [ "nosuid", "nodev" ],
-          :target   => target,
-          :provider => "augeas"
+          name: '/foo',
+          device: '/dev/dsk/c1t1d1s1',
+          blockdevice: '/dev/foo/c1t1d1s1',
+          fstype: 'ufs',
+          pass: '2',
+          atboot: 'yes',
+          options: %w[nosuid nodev],
+          target: target,
+          provider: 'augeas'
         ),
         Puppet::Type.type(:mounttab).new(
-          :name     => "/bar",
-          :device   => "/dev/dsk/c1t1d2s1",
-          :blockdevice => "/dev/foo/c1t1d2s1",
-          :fstype   => "ufs",
-          :pass     => "2",
-          :atboot   => "yes",
-          :options  => [ "nosuid", "nodev" ],
-          :target   => target,
-          :provider => "augeas"
+          name: '/bar',
+          device: '/dev/dsk/c1t1d2s1',
+          blockdevice: '/dev/foo/c1t1d2s1',
+          fstype: 'ufs',
+          pass: '2',
+          atboot: 'yes',
+          options: %w[nosuid nodev],
+          target: target,
+          provider: 'augeas'
         )
       )
 
-      aug_open(target, "Vfstab.lns") do |aug|
+      aug_open(target, 'Vfstab.lns') do |aug|
         aug.match("./*[vfstype='ufs']").size.should == 2
       end
     end
   end
 
-  context "with full vfstab file" do
-    let(:tmptarget) { aug_fixture("full") }
+  context 'with full vfstab file' do
+    let(:tmptarget) { aug_fixture('full') }
     let(:target) { tmptarget.path }
 
-    it "should list instances" do
+    it 'lists instances' do
       allow(provider_class).to receive(:target).and_return(target)
-      inst = provider_class.instances.map { |p|
+      inst = provider_class.instances.map do |p|
         r = {}
-        [:name,:ensure,:device,:blockdevice,:fstype,:options,:pass,:atboot,:dump].each { |pr| r[pr] = p.get(pr) }
+        %i[name ensure device blockdevice fstype options pass atboot dump].each { |pr| r[pr] = p.get(pr) }
         r
-      }
+      end
 
       inst.size.should == 6
-      inst[0].should == {:name=>"/dev/fd", :ensure=>:present, :device=>"fd", :blockdevice=>"-", :fstype=>"fd", :options=>"-", :pass=>"-", :atboot=>"no", :dump=>:absent}
-      inst[1].should == {:name=>"/proc", :ensure=>:present, :device=>"/proc", :blockdevice=>"-", :fstype=>"proc", :options=>"-", :pass=>"-", :atboot=>"no", :dump=>:absent}
-      inst[2].should == {:name=>"-", :ensure=>:present, :device=>"/dev/dsk/c0t0d0s1", :blockdevice=>"-", :fstype=>"swap", :options=>"-", :pass=>"-", :atboot=>"no", :dump=>:absent}
-      inst[3].should == {:name=>"/", :ensure=>:present, :device=>"/dev/dsk/c0t0d0s0", :blockdevice=>"/dev/rdsk/c0t0d0s0", :fstype=>"ufs", :options=>"-", :pass=>"1", :atboot=>"no", :dump=>:absent}
-      inst[5].should == {:name=>"/tmp", :ensure=>:present, :device=>"swap", :blockdevice=>"-", :fstype=>"tmpfs", :options=>["size=1024m"], :pass=>"-", :atboot=>"yes", :dump=>:absent}
+      inst[0].should == { name: '/dev/fd', ensure: :present, device: 'fd', blockdevice: '-', fstype: 'fd', options: '-', pass: '-', atboot: 'no', dump: :absent }
+      inst[1].should == { name: '/proc', ensure: :present, device: '/proc', blockdevice: '-', fstype: 'proc', options: '-', pass: '-', atboot: 'no', dump: :absent }
+      inst[2].should == { name: '-', ensure: :present, device: '/dev/dsk/c0t0d0s1', blockdevice: '-', fstype: 'swap', options: '-', pass: '-', atboot: 'no', dump: :absent }
+      inst[3].should == { name: '/', ensure: :present, device: '/dev/dsk/c0t0d0s0', blockdevice: '/dev/rdsk/c0t0d0s0', fstype: 'ufs', options: '-', pass: '1', atboot: 'no', dump: :absent }
+      inst[5].should == { name: '/tmp', ensure: :present, device: 'swap', blockdevice: '-', fstype: 'tmpfs', options: ['size=1024m'], pass: '-', atboot: 'yes', dump: :absent }
     end
 
-    it "should delete entries" do
-      aug_open(target, "Vfstab.lns") do |aug|
+    it 'deletes entries' do
+      aug_open(target, 'Vfstab.lns') do |aug|
         aug.match("*[file = '/']").should_not == []
       end
 
       apply!(Puppet::Type.type(:mounttab).new(
-        :name     => "/",
-        :ensure   => "absent",
-        :target   => target,
-        :provider => "augeas"
-      ))
+               name: '/',
+               ensure: 'absent',
+               target: target,
+               provider: 'augeas'
+             ))
 
-      aug_open(target, "Vfstab.lns") do |aug|
+      aug_open(target, 'Vfstab.lns') do |aug|
         aug.match("*[file = '/']").should == []
       end
     end
 
-    it "should update device" do
+    it 'updates device' do
       apply!(Puppet::Type.type(:mounttab).new(
-        :name     => "/",
-        :device   => "/dev/dsk/c1t1d1s1",
-        :target   => target,
-        :provider => "augeas"
-      ))
+               name: '/',
+               device: '/dev/dsk/c1t1d1s1',
+               target: target,
+               provider: 'augeas'
+             ))
 
       # fsck will get updated implicitly, due to the type
       # passno gets removed due to issue #16122 against mounttab
       # atboot will get changed, also #16122
-      augparse_filter(target, "Vfstab.lns", "*[file='/']", '
+      augparse_filter(target, 'Vfstab.lns', "*[file='/']", '
         { "1"
           { "spec" = "/dev/dsk/c1t1d1s1" }
           { "fsck" = "/dev/rdsk/c1t1d1s1" }
@@ -163,17 +163,17 @@ describe provider_class, :if => valid_lens? do
       ')
     end
 
-    it "should update fstype" do
+    it 'updates fstype' do
       apply!(Puppet::Type.type(:mounttab).new(
-        :name     => "/",
-        :fstype   => "zfs",
-        :target   => target,
-        :provider => "augeas"
-      ))
+               name: '/',
+               fstype: 'zfs',
+               target: target,
+               provider: 'augeas'
+             ))
 
       # passno gets removed due to issue #16122 against mounttab
       # atboot will get changed, also #16122
-      augparse_filter(target, "Vfstab.lns", "*[file='/']", '
+      augparse_filter(target, 'Vfstab.lns', "*[file='/']", '
         { "1"
           { "spec" = "/dev/dsk/c0t0d0s0" }
           { "fsck" = "/dev/rdsk/c0t0d0s0" }
@@ -184,16 +184,16 @@ describe provider_class, :if => valid_lens? do
       ')
     end
 
-    describe "when updating options" do
-      it "should replace with one option" do
+    describe 'when updating options' do
+      it 'replaces with one option' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/tmp",
-          :options  => "nosuid",
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/tmp',
+                 options: 'nosuid',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        augparse_filter(target, "Vfstab.lns", "*[file='/tmp']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/tmp']", '
           { "1"
             { "spec" = "swap" }
             { "file" = "/tmp" }
@@ -204,15 +204,15 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
-      it "should add multiple options" do
+      it 'adds multiple options' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/tmp",
-          :options  => ["nosuid", "nodev"],
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/tmp',
+                 options: %w[nosuid nodev],
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        augparse_filter(target, "Vfstab.lns", "*[file='/tmp']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/tmp']", '
           { "1"
             { "spec" = "swap" }
             { "file" = "/tmp" }
@@ -224,15 +224,15 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
-      it "should remove options" do
+      it 'removes options' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/tmp",
-          :options  => [],
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/tmp',
+                 options: [],
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        augparse_filter(target, "Vfstab.lns", "*[file='/tmp']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/tmp']", '
           { "1"
             { "spec" = "swap" }
             { "file" = "/tmp" }
@@ -242,16 +242,16 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
-      it "should leave options alone" do
+      it 'leaves options alone' do
         pending "issue #16122 against mounttab type as they're being removed"
 
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/tmp",
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/tmp',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        augparse_filter(target, "Vfstab.lns", "*[file='/tmp']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/tmp']", '
           { "1"
             { "spec" = "swap" }
             { "file" = "/tmp" }
@@ -264,16 +264,16 @@ describe provider_class, :if => valid_lens? do
       end
     end
 
-    describe "when updating blockdevice" do
-      it "should add blockdevice" do
+    describe 'when updating blockdevice' do
+      it 'adds blockdevice' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/tmp",
-          :blockdevice => "/dev/tofsck",
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/tmp',
+                 blockdevice: '/dev/tofsck',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        augparse_filter(target, "Vfstab.lns", "*[file='/tmp']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/tmp']", '
           { "1"
             { "spec" = "swap" }
             { "fsck" = "/dev/tofsck" }
@@ -284,17 +284,17 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
-      it "should change blockdevice" do
+      it 'changes blockdevice' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/",
-          :blockdevice => "/dev/foo/c0t0d0s0",
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/',
+                 blockdevice: '/dev/foo/c0t0d0s0',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
         # passno gets removed due to issue #16122 against mounttab
         # atboot will get changed, also #16122
-        augparse_filter(target, "Vfstab.lns", "*[file='/']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/']", '
           { "1"
             { "spec" = "/dev/dsk/c0t0d0s0" }
             { "fsck" = "/dev/foo/c0t0d0s0" }
@@ -305,17 +305,17 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
-      it "should remove blockdevice" do
+      it 'removes blockdevice' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/fsck",
-          :blockdevice => "-",
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/fsck',
+                 blockdevice: '-',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
         # passno gets removed due to issue #16122 against mounttab
         # atboot will get changed, also #16122
-        augparse_filter(target, "Vfstab.lns", "*[file='/fsck']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/fsck']", '
           { "1"
             { "spec" = "mydev" }
             { "file" = "/fsck" }
@@ -326,16 +326,16 @@ describe provider_class, :if => valid_lens? do
       end
     end
 
-    describe "when updating atboot" do
-      it "should change atboot" do
+    describe 'when updating atboot' do
+      it 'changes atboot' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/dev/fd",
-          :atboot   => "yes",
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/dev/fd',
+                 atboot: 'yes',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        augparse_filter(target, "Vfstab.lns", "*[file='/dev/fd']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/dev/fd']", '
           { "1"
             { "spec" = "fd" }
             { "file" = "/dev/fd" }
@@ -346,17 +346,17 @@ describe provider_class, :if => valid_lens? do
       end
     end
 
-    describe "when updating pass" do
-      it "should add pass" do
+    describe 'when updating pass' do
+      it 'adds pass' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/dev/fd",
-          :pass     => 2,
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/dev/fd',
+                 pass: 2,
+                 target: target,
+                 provider: 'augeas'
+               ))
 
         # atboot will get changed, also #16122
-        augparse_filter(target, "Vfstab.lns", "*[file='/dev/fd']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/dev/fd']", '
           { "1"
             { "spec" = "fd" }
             { "file" = "/dev/fd" }
@@ -367,16 +367,16 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
-      it "should change pass" do
+      it 'changes pass' do
         apply!(Puppet::Type.type(:mounttab).new(
-          :name     => "/",
-          :pass     => 7,
-          :target   => target,
-          :provider => "augeas"
-        ))
+                 name: '/',
+                 pass: 7,
+                 target: target,
+                 provider: 'augeas'
+               ))
 
         # atboot will get changed, also #16122
-        augparse_filter(target, "Vfstab.lns", "*[file='/']", '
+        augparse_filter(target, 'Vfstab.lns', "*[file='/']", '
           { "1"
             { "spec" = "/dev/dsk/c0t0d0s0" }
             { "fsck" = "/dev/rdsk/c0t0d0s0" }
@@ -390,19 +390,19 @@ describe provider_class, :if => valid_lens? do
     end
   end
 
-  context "with broken vfstab file" do
-    let(:tmptarget) { aug_fixture("broken") }
+  context 'with broken vfstab file' do
+    let(:tmptarget) { aug_fixture('broken') }
     let(:target) { tmptarget.path }
 
-    it "should fail to load" do
+    it 'fails to load' do
       txn = apply(Puppet::Type.type(:mounttab).new(
-        :name     => "/",
-        :device   => "/dev/dsk/c0t0d1s0",
-        :target   => target,
-        :provider => "augeas"
-      ))
+                    name: '/',
+                    device: '/dev/dsk/c0t0d1s0',
+                    target: target,
+                    provider: 'augeas'
+                  ))
 
-      txn.any_failed?.should_not == nil
+      txn.any_failed?.should_not.nil?
       @logs.first.level.should == :err
       @logs.first.message.include?(target).should == true
     end

@@ -25,3 +25,4 @@ require 'augeas_spec'
 $LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/augeasproviders_core/lib'))
 
 $LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/mount_providers/lib'))
+Dir['./spec/support/spec/**/*.rb'].sort.each { |f| require f }
