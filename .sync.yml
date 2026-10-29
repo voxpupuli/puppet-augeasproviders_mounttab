@@ -14,3 +14,5 @@ spec/spec_helper.rb:
     - "# augeasproviders: setting $LOAD_PATH to work around broken type autoloading"
     - "$LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/augeasproviders_core/lib'))"
     - "$LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/mount_providers/lib'))"
+spec/spec_helper_acceptance.rb:
+  unmanaged: false
