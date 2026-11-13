@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.0](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/tree/v5.0.0) (2026-11-13)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/compare/v4.0.0...v5.0.0)
+
+**Breaking changes:**
+
+- Drop EOL OSes: Debian 10, 11, Ubuntu 18.04, 20.04, EL 7, CentOS 8 [\#59](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/59) ([evgeni](https://github.com/evgeni))
+- Drop puppet, update openvox minimum version to 8.19 [\#40](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/40) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- Add support for EL10 [\#58](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/58) ([evgeni](https://github.com/evgeni))
+- Add support for Ubuntu 22.04, 24.04, 26.04 [\#57](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/57) ([evgeni](https://github.com/evgeni))
+- Add support for Debian 13 [\#56](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/56) ([evgeni](https://github.com/evgeni))
+- puppet/augeasproviders\_core: Allow 5.x [\#53](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/53) ([bastelfreak](https://github.com/bastelfreak))
+- Add basic acceptance tests [\#52](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/52) ([bwitt](https://github.com/bwitt))
+- Update requirements to allow OpenVox 9 [\#51](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/51) ([sebastianrakel](https://github.com/sebastianrakel))
+- Add support for Debian 12 [\#42](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/42) ([smortex](https://github.com/smortex))
+- metadata.json: Add OpenVox [\#36](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/pull/36) ([jstraw](https://github.com/jstraw))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/tree/v4.0.0) (2023-06-22)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_mounttab/compare/v3.0.0...v4.0.0)
