@@ -22,8 +22,6 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "10",
-        "11",
         "12",
         "13"
       ]
@@ -31,8 +29,6 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04",
-        "20.04",
         "22.04",
         "24.04",
         "26.04"
@@ -41,7 +37,6 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
         "8",
         "9",
         "10"
@@ -50,8 +45,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8",
         "9",
         "10"
       ]
@@ -82,7 +75,6 @@
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
         "8",
         "9",
         "10"
